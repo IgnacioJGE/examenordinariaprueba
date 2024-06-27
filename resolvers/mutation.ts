@@ -93,7 +93,8 @@ try {
       if(continua==false){
           throw new Error("Telefono incorrecto")
       }
-    const nuevocontacto = await Modelocontacto.findByIdAndUpdate({id:args.id},{nombre:args.nombre,telefono:args.telefono})
+    const nuevocontacto = await Modelocontacto.findByIdAndUpdate(args.id,{nombre:args.nombre,telefono:args.telefono})
+    console.log(nuevocontacto)
     return  {
         _id:nuevocontacto?.id,
         nombre:args.nombre,
