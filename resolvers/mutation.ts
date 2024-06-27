@@ -34,5 +34,63 @@ export const Mutation = {
         }
 
 
+    },
+    deleteContact: async (_: unknown,
+        args: { id:string }
+    ): Promise<boolean> => {
+        try {
+
+            const contactoeliminar= await Modelocontacto.findByIdAndDelete(args.id)
+          
+            return true;
+        } catch (error) {
+            return false;
+
+        }
+
+
+    },
+    
+    updateContact: async (_: unknown,
+        args: { id:string,nombre: string, telefono: string }
+    ): Promise<tipocontacto> => {
+
+try {
+
+    if(!args.telefono&&!args.nombre){
+        throw new Error("Error nombre o telefono necesarios")
+
     }
+    if(!args.telefono){
+        const nuevocontacto = await Modelocontacto.findByIdAndUpdate(args.id,{nombre:args.nombre})
+        return nuevocontacto
+    }
+    if(!args.nombre){
+        const  api_url = `https://api.api-ninjas.com/v1/validatephone?number=${args.telefono}`
+        const   response = await axios.get(api_url, {
+          headers :
+          {'X-Api-Key': api_key}})
+          const continua=response.data.is_valid;
+          if(continua==false){
+              throw new Error("Telefono incorrecto")
+          }
+        const nuevocontacto = await Modelocontacto.findByIdAndUpdate(args.id,{telefono:args.telefono})
+        return nuevocontacto   
+    }
+    const  api_url = `https://api.api-ninjas.com/v1/validatephone?number=${args.telefono}`
+    const   response = await axios.get(api_url, {
+      headers :
+      {'X-Api-Key': api_key}})
+      const continua=response.data.is_valid;
+      if(continua==false){
+          throw new Error("Telefono incorrecto")
+      }
+    const nuevocontacto = await Modelocontacto.findByIdAndUpdate({id:args.id},{nombre:args.nombre,telefono:args.telefono})
+    return nuevocontacto;    
+} catch (error) {
+    return new Error(error.message)
+}
+
+
+    },
 }
