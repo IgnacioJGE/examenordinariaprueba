@@ -4,6 +4,7 @@ export type contacto={
 }
 
 export type contactomostrar={
+    id:string,
     nombre:string,
     telefono:string,
     pais:string,
