@@ -63,7 +63,11 @@ try {
     }
     if(!args.telefono){
         const nuevocontacto = await Modelocontacto.findByIdAndUpdate(args.id,{nombre:args.nombre})
-        return nuevocontacto
+        return  {
+            _id:nuevocontacto?.id,
+            nombre:args.nombre,
+            telefono:nuevocontacto?.telefono
+        }
     }
     if(!args.nombre){
         const  api_url = `https://api.api-ninjas.com/v1/validatephone?number=${args.telefono}`
@@ -75,7 +79,11 @@ try {
               throw new Error("Telefono incorrecto")
           }
         const nuevocontacto = await Modelocontacto.findByIdAndUpdate(args.id,{telefono:args.telefono})
-        return nuevocontacto   
+        return  {
+            _id:nuevocontacto?.id,
+            nombre:nuevocontacto?.nombre,
+            telefono:args.telefono
+        }   
     }
     const  api_url = `https://api.api-ninjas.com/v1/validatephone?number=${args.telefono}`
     const   response = await axios.get(api_url, {
@@ -86,7 +94,11 @@ try {
           throw new Error("Telefono incorrecto")
       }
     const nuevocontacto = await Modelocontacto.findByIdAndUpdate({id:args.id},{nombre:args.nombre,telefono:args.telefono})
-    return nuevocontacto;    
+    return  {
+        _id:nuevocontacto?.id,
+        nombre:args.nombre,
+        telefono:args.telefono
+    };    
 } catch (error) {
     return new Error(error.message)
 }
