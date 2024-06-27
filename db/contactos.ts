@@ -21,6 +21,7 @@ schemaContacto.pre("save",async function (next) {
         return next(new Error("El numero de felefono ya existe"))
     }
         next();
+        
     })
 
 export const Modelocontacto = mongoose.model<tipocontacto>("Contactos", schemaContacto)
